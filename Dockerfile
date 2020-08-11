@@ -1,4 +1,4 @@
-FROM 0x01be/alpine:edge as builder
+FROM alpine as builder
 
 RUN apk --no-cache add --virtual yosys-build-dependencies \
     git \
@@ -26,7 +26,7 @@ WORKDIR yosys
 RUN make
 RUN PREFIX=/opt/yosys make install
 
-FROM 0x01be/alpine:edge
+FROM alpine
 
 COPY --from=builder /opt/yosys/ /opt/yosys/
 
