@@ -19,7 +19,7 @@ RUN apk --no-cache add --virtual yosys-build-dependencies \
     zlib-dev \
     bash
 
-RUN git clone https://github.com/YosysHQ/yosys.git /yosys
+RUN git clone --depth 1 https://github.com/YosysHQ/yosys.git /yosys
 
 WORKDIR yosys
 
