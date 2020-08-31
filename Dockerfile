@@ -32,3 +32,5 @@ COPY --from=builder /opt/yosys/ /opt/yosys/
 
 ENV PATH $PATH:/opt/yosys/bin/
 
+WORKDIR /workspace
+
