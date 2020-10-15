@@ -1,4 +1,4 @@
-FROM alpine as builder
+FROM alpine as build
 
 RUN apk --no-cache add --virtual yosys-build-dependencies \
     git \
@@ -19,7 +19,8 @@ RUN apk --no-cache add --virtual yosys-build-dependencies \
     zlib-dev \
     bash
 
-RUN git clone --depth 1 https://github.com/YosysHQ/yosys.git /yosys
+ENV YOSYS_REVISION master
+RUN git clone --depth 1 --branch ${YOSYS_REVISION} https://github.com/YosysHQ/yosys.git /yosys
 
 WORKDIR yosys
 
@@ -28,9 +29,24 @@ RUN PREFIX=/opt/yosys make install
 
 FROM alpine
 
-COPY --from=builder /opt/yosys/ /opt/yosys/
+COPY --from=build /opt/yosys/ /opt/yosys/
 
-ENV PATH $PATH:/opt/yosys/bin/
+RUN apk --no-cache add --virtual yosys-runtime-dependencies \
+    python3 \
+    tcl \
+    graphviz \
+    readline \
+    libffi \
+    zlib \
+    libstdc++
+
+RUN adduser -D -u 1000 yosys
 
 WORKDIR /workspace
+
+RUN chown yosys:yosys /workspace
+
+USER yosys
+
+ENV PATH $PATH:/opt/yosys/bin/
 
