@@ -1,4 +1,4 @@
-FROM alpine as build
+FROM 00x01ne/base as build
 
 RUN apk --no-cache add --virtual yosys-build-dependencies \
     git \
