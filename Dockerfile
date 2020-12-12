@@ -27,7 +27,7 @@ WORKDIR yosys
 RUN make
 RUN PREFIX=/opt/yosys make install
 
-FROM alpine
+FROM 0x01be/base
 
 COPY --from=build /opt/yosys/ /opt/yosys/
 
