@@ -1,4 +1,4 @@
-FROM 00x01ne/base as build
+FROM 0x01be/base as build
 
 RUN apk --no-cache add --virtual yosys-build-dependencies \
     git \
