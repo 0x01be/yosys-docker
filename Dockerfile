@@ -1,5 +1,7 @@
 FROM 0x01be/base as build
 
+ENV REVISION=master
+WORKDIR /yosys
 RUN apk --no-cache add --virtual yosys-build-dependencies \
     git \
     build-base \
@@ -17,14 +19,9 @@ RUN apk --no-cache add --virtual yosys-build-dependencies \
     boost-filesystem \
     boost-dev \
     zlib-dev \
-    bash
-
-ENV YOSYS_REVISION master
-RUN git clone --depth 1 --branch ${YOSYS_REVISION} https://github.com/YosysHQ/yosys.git /yosys
-
-WORKDIR yosys
-
-RUN make
+    bash &&\
+    git clone --depth 1 --branch ${REVISION} https://github.com/YosysHQ/yosys.git /yosys &&\
+    make
 RUN PREFIX=/opt/yosys make install
 
 FROM 0x01be/base
@@ -38,15 +35,11 @@ RUN apk --no-cache add --virtual yosys-runtime-dependencies \
     readline \
     libffi \
     zlib \
-    libstdc++
-
-RUN adduser -D -u 1000 yosys
-
-WORKDIR /workspace
-
-RUN chown yosys:yosys /workspace
+    libstdc++ &&\
+    adduser -D -u 1000 yosys &&\
+    chown yosys:yosys /workspace
 
 USER yosys
-
-ENV PATH $PATH:/opt/yosys/bin/
+WORKDIR /workspace
+ENV PATH=${PATH}:/opt/yosys/bin/
 
