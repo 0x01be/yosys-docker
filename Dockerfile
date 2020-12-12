@@ -28,6 +28,8 @@ FROM 0x01be/base
 
 COPY --from=build /opt/yosys/ /opt/yosys/
 
+WORKDIR /workspace
+
 RUN apk --no-cache add --virtual yosys-runtime-dependencies \
     python3 \
     tcl \
@@ -40,6 +42,5 @@ RUN apk --no-cache add --virtual yosys-runtime-dependencies \
     chown yosys:yosys /workspace
 
 USER yosys
-WORKDIR /workspace
 ENV PATH=${PATH}:/opt/yosys/bin/
 
